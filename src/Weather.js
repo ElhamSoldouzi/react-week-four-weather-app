@@ -1,19 +1,19 @@
 import React, { useState } from "react";
+import FormattedDate from "./FormattedDate";
 import axios from "axios";
 import "./Weather.css";
 
 export default function Weather(props) {
-  const [weatherDate, setWeatherData] = useState({ ready: false });
+  const [weatherData, setWeatherData] = useState({ ready: false });
 
   function tempCelsius(response) {
-    console.log(response.data);
     setWeatherData({
       ready: true,
       temperature: response.data.main.temp,
       humidity: response.data.main.humidity,
       wind: response.data.wind.speed,
       coordinates: response.data.coord,
-      date: "Saturday 23:00",
+      date: new Date(response.data.dt * 1000),
       description: response.data.weather[0].description,
       iconUrl:
         "https://www.gstatic.com/weather/conditions/v1/svg/clear_night_light.svg",
@@ -21,7 +21,7 @@ export default function Weather(props) {
     });
   }
 
-  if (weatherDate.ready) {
+  if (weatherData.ready) {
     return (
       <div className="Weather">
         <form>
@@ -43,22 +43,24 @@ export default function Weather(props) {
             </div>
           </div>
         </form>
-        <h1>{weatherDate.city}</h1>
+        <h1>{weatherData.city}</h1>
         <ul>
-          <li>{weatherDate.date}</li>
-          <li className="text-capitalize">{weatherDate.description}</li>
+          <li>
+            <FormattedDate date={weatherData.date} />
+          </li>
+          <li className="text-capitalize">{weatherData.description}</li>
         </ul>
         <div className="row mt-3">
           <div className="col-6">
             <div className="clearfix">
               <img
-                src={weatherDate.iconUrl}
-                alt={weatherDate.description}
+                src={weatherData.iconUrl}
+                alt={weatherData.description}
                 className="float-start"
               />
               <div className="float-start ms-2">
                 <span className="temperature">
-                  {Math.round(weatherDate.temperature)}
+                  {Math.round(weatherData.temperature)}
                 </span>
                 <span className="unit">°C</span>
               </div>
@@ -66,9 +68,8 @@ export default function Weather(props) {
           </div>
           <div className="col-6">
             <ul>
-              <li></li>
-              <li>Humidity : {weatherDate.humidity}%</li>
-              <li>Wind :{weatherDate.wind} km/h</li>
+              <li>Humidity : {weatherData.humidity}%</li>
+              <li>Wind : {weatherData.wind} km/h</li>
             </ul>
           </div>
         </div>
@@ -76,11 +77,11 @@ export default function Weather(props) {
     );
   } else {
     const apiKey = "9cb72bec958f8fb02391985ed7b219d2";
-    let units = "metric";
-    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${props.defaultCity}&appid=${apiKey}&units=${units}`;
+    const units = "metric";
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${props.defaultCity}&appid=${apiKey}&units=${units}`;
 
     axios.get(apiUrl).then(tempCelsius);
 
-    return "Loaing";
+    return "Loading...";
   }
 }
