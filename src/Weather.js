@@ -6,6 +6,8 @@ import WeatherInfo from "./WeatherInfo";
 export default function Weather(props) {
   const [weatherData, setWeatherData] = useState({ ready: false });
   const [city, setCity] = useState(props.defaultCity);
+  const [error, setError] = useState(null);
+
   function tempCelsius(response) {
     setWeatherData({
       ready: true,
@@ -15,18 +17,24 @@ export default function Weather(props) {
       coordinates: response.data.coord,
       date: new Date(response.data.dt * 1000),
       description: response.data.weather[0].description,
-      iconUrl:
-        "https://www.gstatic.com/weather/conditions/v1/svg/clear_night_light.svg",
+      iconUrl: `https://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`,
       city: response.data.name,
     });
   }
 
+  function handleError() {
+    setError("City not found. Please try again.");
+  }
+
   function search() {
+    if (error) {
+      setError(null);
+    }
     const apiKey = "9cb72bec958f8fb02391985ed7b219d2";
 
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
-    axios.get(apiUrl).then(tempCelsius);
+    axios.get(apiUrl).then(tempCelsius).catch(handleError);
   }
 
   function handleSubmit(event) {
@@ -62,6 +70,7 @@ export default function Weather(props) {
           </div>
         </form>
         <WeatherInfo data={weatherData} />
+        {error && <div className="text-danger">{error}</div>}
       </div>
     );
   } else {
