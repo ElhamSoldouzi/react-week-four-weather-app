@@ -31,7 +31,7 @@ export default function Weather(props) {
     if (error) {
       setError(null);
     }
-    const apiKey = "9cb72bec958f8fb02391985ed7b219d2";
+    const apiKey = "df932985a0a4809c71278da10da1097b";
 
     const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
