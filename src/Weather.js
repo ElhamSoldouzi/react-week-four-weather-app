@@ -4,6 +4,8 @@ import WeatherForcast from "./WeatherForcast";
 import axios from "axios";
 import "./Weather.css";
 
+import logo from "./images/shecodes-logo.png";
+
 export default function Weather(props) {
   const [weatherData, setWeatherData] = useState({ ready: false });
   const [city, setCity] = useState(props.defaultCity);
@@ -40,6 +42,7 @@ export default function Weather(props) {
   if (weatherData.ready) {
     return (
       <div className="Weather">
+        <img src={logo} className="logo" alt="shaecodes logo" />
         <form onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-9">
@@ -55,7 +58,7 @@ export default function Weather(props) {
               <input
                 type="submit"
                 value="Search"
-                className="btn btn-primary w-100"
+                className="btn btn-primary w-100 form-btn"
               />
             </div>
           </div>

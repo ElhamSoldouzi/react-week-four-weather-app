@@ -2,8 +2,9 @@
   font-family: "Google Sans", Arial, sans-serif;
   border: 1px solid #ecedef;
   color: rgb(135, 135, 135);
-  padding: 16px;
-  border-radius: 4px;
+  padding: 25px;
+  border-radius: 20px;
+  background-color: #ffffff;
 }
 
 .Weather form {
@@ -56,6 +57,38 @@
 
 .Weather canvas {
   margin-right: 5px;
-  margin-top: 5px;
+  margin-top: 15px;
   display: inline-block;
+}
+
+.Weather .form-control {
+  background-color: #f9f7fe;
+}
+
+.Weather .form-btn {
+  background-color: #885df1;
+}
+
+.WeatherInfo li strong {
+  color: #fe1c4a;
+}
+
+.weatherForcast-temperatures .temp-max {
+  color: #fe1c4a;
+}
+
+.weatherForcast-temperatures .temp-min {
+  color: #fe1c4a;
+}
+
+.WeatherInfo {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.Weather .logo {
+  width: 150px;
+  height: 42px;
+  display: block;
+  margin-bottom: 20px;
 }
