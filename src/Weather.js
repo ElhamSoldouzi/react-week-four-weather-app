@@ -1,41 +1,25 @@
 import React, { useState } from "react";
-import axios from "axios";
-import "./Weather.css";
 import WeatherInfo from "./WeatherInfo";
 import WeatherForcast from "./WeatherForcast";
+import axios from "axios";
+import "./Weather.css";
 
 export default function Weather(props) {
   const [weatherData, setWeatherData] = useState({ ready: false });
   const [city, setCity] = useState(props.defaultCity);
-  const [error, setError] = useState(null);
 
   function tempCelsius(response) {
     setWeatherData({
       ready: true,
-      temperature: response.data.main.temp,
-      humidity: response.data.main.humidity,
+      temperature: response.data.temperature.current,
       wind: response.data.wind.speed,
-      coordinates: response.data.coord,
-      date: new Date(response.data.dt * 1000),
-      description: response.data.weather[0].description,
-      icon: response.data.weather[0].icon,
-      city: response.data.name,
+      humidity: response.data.temperature.humidity,
+      date: new Date(response.data.time * 1000),
+      description: response.data.condition.description,
+      icon: response.data.condition.icon,
+      city: response.data.city,
+      coordinates: response.data.coordinates,
     });
-  }
-
-  function handleError() {
-    setError("City not found. Please try again.");
-  }
-
-  function search() {
-    if (error) {
-      setError(null);
-    }
-    const apiKey = "df932985a0a4809c71278da10da1097b";
-
-    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-
-    axios.get(apiUrl).then(tempCelsius).catch(handleError);
   }
 
   function handleSubmit(event) {
@@ -45,6 +29,12 @@ export default function Weather(props) {
 
   function cityChange(event) {
     setCity(event.target.value);
+  }
+
+  function search() {
+    const apiKey = "4e4452b3b8e30dte63o4ebba04a0fef4";
+    let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}`;
+    axios.get(apiUrl).then(tempCelsius);
   }
 
   if (weatherData.ready) {
@@ -72,7 +62,6 @@ export default function Weather(props) {
         </form>
         <WeatherInfo data={weatherData} />
         <WeatherForcast coordinates={weatherData.coordinates} />
-        {error && <div className="text-danger">{error}</div>}
       </div>
     );
   } else {
